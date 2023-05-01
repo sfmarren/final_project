@@ -39,6 +39,36 @@
 	<meta property="og:image:height" content="630"/>
 	<title>My Personal Webpage</title>
 	<style>
+		.cookie-popup {
+			position: fixed;
+			bottom: 0;
+			left: 0;
+			width: 100%;
+			padding: 10px;
+			background-color: #000;
+			color: #fff;
+			font-size: 14px;
+			z-index: 9999;
+		}
+		.cookie-popup a {
+			color: #fff;
+			text-decoration: underline;
+		}
+		.cookie-popup .btn {
+			display: inline-block;
+			padding: 6px 12px;
+			background-color: #fff;
+			color: #000;
+			border: none;
+			cursor: pointer;
+			margin-left: 10px;
+			font-size: 14px;
+			border-radius: 3px;
+		}
+		.cookie-popup .btn:hover {
+			background-color: #ddd;
+			color: #000;
+		}
 		body {
 			font-family: Arial, sans-serif;
 			margin: 0;
@@ -124,8 +154,45 @@
 			display: inline-block;
 		}
 	</style>
+	<script>
+		/* Cookie popup script */
+		window.onload = function() {
+			var cookiePopup = document.getElementById("cookie-popup");
+			var acceptBtn = document.getElementById("accept-btn");
+			if (getCookie("cookiesAccepted") === "") {
+				cookiePopup.style.display = "block";
+				acceptBtn.onclick = function() {
+					setCookie("cookiesAccepted", "true", 365);
+					cookiePopup.style.display = "none";
+				};
+			}
+			function setCookie(name, value, days) {
+				var expires = "";
+				if (days) {
+					var date = new Date();
+					date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+					expires = "; expires=" + date.toUTCString();
+				}
+				document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+			}
+			function getCookie(name) {
+				var nameEQ = name + "=";
+				var ca = document.cookie.split(';');
+				for(var i=0;i < ca.length;i++) {
+					var c = ca[i];
+					while (c.charAt(0)==' ') c = c.substring(1,c.length);
+					if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+				}
+				return "";
+			}
+		}
+	</script>	
 </head>
 <body>
+	<div id="cookie-popup" class="cookie-popup">
+		We use cookies to ensure you get the best experience on our website. By continuing to browse the site, you agree to our use of cookies. <a href="cookie-policy.html" target="_blank">Learn more</a>
+		<button id="accept-btn" class="btn">I accept</button>
+	</div>
 	<header>
 		<h1>My Personal Webpage</h1>
 	</header>
